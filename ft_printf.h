@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#pragma once
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -61,9 +60,9 @@ int		numcond(char *c);
 int		zerocond(char **c);
 int		pointcond(char **c);
 int		percentcond(char **c, int ret, va_list argptr);
-//---------------TRATA--------------------//
+
+//-----	FUNCTIONS	-----//
 int		nonmfw(char **c, int ret, va_list argptr, int mfw);
 int		mfwpos(char **c, int ret, va_list argptr, int mfw);
-int		tratamento(char *c, int ret, va_list argptr);
+int		print_loop(char *c, int ret, va_list argptr);
 int		ft_printf(const char *c, ...);
-#endif

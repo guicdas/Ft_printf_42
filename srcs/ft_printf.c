@@ -19,7 +19,7 @@ int	ft_printf(const char *s, ...)
 
 	ret = 0;
 	va_start(argptr, s);
-	ret = tratamento((char *)s, ret, argptr);
+	ret = print_loop((char *)s, ret, argptr);
 	va_end(argptr);
 	return (ret);
 }

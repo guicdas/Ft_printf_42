@@ -10,98 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
-int	mfwpos(char **c, int ret, va_list argptr, int mfw)
-{
-	(*c)++;
-	if (minuscond(c))
-		ret = minusaction(c, ret, argptr);
-	else if (zerocond(c))
-		ret = zeroaction(c, ret, argptr);
-	else if (pointcond(c))
-		ret = pointaction(c, ret, argptr, mfw);
-	else
-		ret = ret + compare(c, argptr);
-	return (ret);
+t_data *data(void){
+	static t_data d;
+
+	return (&d);
 }
-
-int	nonmfw(char **c, int ret, va_list argptr, int mfw)
-{
-	if (minuscond(c))
-		ret = minusaction(c, ret, argptr);
-	else if (zerocond(c))
-		ret = zeroaction(c, ret, argptr);
-	else if (pointcond(c))
-		ret = pointaction(c, ret, argptr, mfw);
-	else
-	{
-		mfw = numcond(*c);
-		if (mfw != 0)
-			ret = ret + action(c, argptr, mfw, mfw);
-		else
-			ret = ret + compare(c, argptr);
-	}
-	return (ret);
-}
-
-int	percentcond(char **c, int ret, va_list argptr)
-{
-	int	mfw;
-
-	(*c)++;
-	mfw = numcond(*c);
-	if (mfw > 0)
-		ret = mfwpos(c, ret, argptr, mfw);
-	else
-		ret = nonmfw(c, ret, argptr, mfw);
-	return (ret);
-}
-
-int	print_loop(char *c, int ret, va_list argptr)
-{
-	while (*c)
-	{
-		if (*c == '%')
-			ret = percentcond(&c, ret, argptr);
-		else
-			ret += write(1, c, 1);
-		c++;
-	}
-	return (ret);
-}
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gcatarin <gcatarin@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/06 13:54:09 by gcatarin          #+#    #+#             */
-/*   Updated: 2024/02/25 10:26:20 by gcatarin         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "minishell.h"
 
 static char	*line_treat(char *str, char *new, size_t *index)
 {
 	size_t	i;
 	size_t	j;
 
-	i = (str[0] == '>' || str[0] == '<' || str[0] == '|');
-	i += (i && (str[1] == '>' || str[1] == '<'));
+	i = (str[0] == '%');
+	//i += (i && (str[1] == '%'));
 	if (i)
 	{
 		j = *index;
 		new[j++] = '\2';
-		if (str[0] == '|')
-			str[0] = '\3';
-		new[j++] = str[0];
-		if (i == 2)
-			new[j++] = str[1];
-		new[j++] = '\2';
+		//if (i == 2)
+		//	new[j++] = str[1];
 		index[0] = j;
 	}
 	return (str + i);
@@ -109,93 +38,71 @@ static char	*line_treat(char *str, char *new, size_t *index)
 
 static char	*line_dup(char *str, char *new)
 {
-	char	flag;
 	size_t	i;
-	size_t	j;
 
-	flag = 0;
 	i = 0;
 	while (*str)
 	{
-		j = i;
-		if (*str == flag)
-			flag = 0;
-		else if (flag == 0 && (*str == '\'' || *str == '\"'))
-			flag = *str;
-		if (!flag && ft_isspace(*str))
-			*str = '\2';
-		else if (flag == 0)
-			str = line_treat(str, new, &i);
-		if (j != i)
-			continue ;
+		str = line_treat(str, new, &i);
 		new[i++] = *str;
 		str++;
 	}
-	return (flag_return(flag, new));
+	return (new);
 }
 
-static t_cmd	*new_cmd(char **args)
+static int	is_token(char c)
 {
-	t_cmd	*cmd;
-
-	cmd = ft_calloc(sizeof(t_cmd), 1);
-	if (cmd == NULL)
-		return (NULL);
-	cmd->args = args;
-	cmd->fd[0] = 0;
-	cmd->fd[1] = 1;
-	cmd->in_file = -1;
-	cmd->out_file = -1;
-	cmd->pid = 0;
-	cmd->path = NULL;
-	return (cmd);
-}
-
-static int	cmd_loop(char *tokens, t_shell *s, int valid)
-{
-	char	**cmds;
-	size_t	i;
-	t_cmd	*end;
-	t_cmd	*cmd;
-
-	cmds = ft_split(tokens, '\3', 0);
-	s->cmd = NULL;
-	end = NULL;
-	i = -1;
-	while (cmds[++i])
-	{
-		if (ft_strncmp(cmds[i], "\2", 2) == 0 || cmds[i] == NULL)
-			valid = 0;
-		cmd = new_cmd(ft_split(cmds[i], '\2', 0));
-		s->num_cmds++;
-		if (!s->cmd)
-			s->cmd = cmd;
-		else if (end)
-			end->next = cmd;
-		end = cmd;
-	}
-	free_array(cmds);
-	return (valid);
-}
-
-int	tokeniser(const char *str, t_shell *s)
-{
-	char	*tokens;
-	int		valid;
-
-	valid = 0;
-	tokens = line_dup((char *) str, ft_calloc(10, ft_strlen(str)));
-	if (tokens == NULL)
-		ft_putstr_fd("Syntax error\n", 2);
+	if (c == '-') //Left-justify within the given field width;
+		data()->minus = 1;
+	else if (c == ' ')
+		data()->space = 1;
+	else if (c == '.')
+		data()->dot = 1;
+	else if (c == '0')
+		data()->zero = 1;
+	else if (c == '#')
+		data()->hash = 1;
+	else if (c == '+')
+		data()->plus = 1;
 	else
-	{
-		if (cmd_loop(tokens, s, 1) == 0)
-		{
-			ft_putstr_fd("Syntax Error !\n", 2);
-			valid = 1;
-		}
-	}
-	free(tokens);
-	return (valid);
+		return (0);
+	return (1);
 }
 
+static void	token(char *s, va_list argptr)
+{
+	size_t	i;
+
+	i = 0;
+	printf("\nTOKEN ->%s\n", s);
+	while (s[i] && is_token(s[i]))
+	{
+		//printf("found token.\n");
+		i++;
+	}
+	if (is_specifier(s[i], argptr))
+	{
+		//printf("\nfound specifier.\n");
+		i++;
+	}
+	else
+		data()->ret += write(1, s, ft_strlen(s));
+	if (i < ft_strlen(s))
+	{
+		while (s[i])
+			data()->ret += write(1, &s[i++], 1);
+	}
+}
+
+void	token_loop(char *s, va_list argptr)
+{
+	char	**tokens;
+	char	*dup_array;
+	size_t	i;
+
+	dup_array = line_dup(s, ft_calloc(2, ft_strlen(s)));
+	tokens = ft_split(dup_array, '\2', 0);
+	i = -1;
+	while (tokens[++i])
+		token(tokens[i], argptr);
+}

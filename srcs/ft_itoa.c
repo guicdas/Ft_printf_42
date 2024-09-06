@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
-char	*convert(long long n, char *str, int bs, char *b)
+static char	*convert(long long n, char *str, int bs, char *b)
 {
 	if (n < 0)
 	{

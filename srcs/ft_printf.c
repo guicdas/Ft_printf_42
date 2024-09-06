@@ -10,24 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
 int	ft_printf(const char *s, ...)
 {
-	int		ret;
 	va_list	argptr;
 
-	ret = 0;
 	va_start(argptr, s);
-	ret = print_loop((char *)s, ret, argptr);
+	token_loop((char *)s, argptr);
 	va_end(argptr);
-	return (ret);
+
+	return (data()->ret);
 }
 
-int main()
+int main(void)
 {
 	int	i;
 
-	i = ft_printf("%s\n", "Hello World!");
-	printf("return: %d\n", i);
+	i = ft_printf(".%d. abcdef%% .%d+2. \n", 10, 15);
+	printf("return ->%d\n", i);
+	i = printf(".%d. abcdef%% .%d+2. \n", 10, 15);
+	printf("return ->%#d\n", 25);
 }
+
+// i = ft_printf(".%d.%%. .%s+2. \n");
+// i = ft_printf("%.%");
+// (%sotokens %)

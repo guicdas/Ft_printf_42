@@ -10,19 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
-size_t	ft_strlen(char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-int	fun(va_list argptr, char *s, char c)
+int	f_uns(va_list argptr, char *s, char c)
 {
 	unsigned long long	t;
 	int					i;
@@ -39,37 +29,17 @@ int	fun(va_list argptr, char *s, char c)
 	return (i + put_b_nbr(t, s, 16));
 }
 
-int	conta(char *arg)
-{
-	int	ret;
-
-	ret = 0;
-	while (*arg++)
-		ret++;
-	return (ret);
-}
-
-int	nums(int n)
-{
-	int	i;
-
-	i = 0;
-	while (n > 0)
-	{
-		n = n / 10;
-		i++;
-	}
-	return (i);
-}
-
 int	spaceflag(char **str, va_list argptr)
 {
+	(void)str;
+	(void)argptr;
+	/*
 	int	nums;
 	int	i;
 
 	i = 0;
 	(*str)++;
-	nums = numcond(*str);
+	//nums = numcond(*str);
 	i = nums;
 	if (i == -1)
 		nums = 1;
@@ -79,8 +49,8 @@ int	spaceflag(char **str, va_list argptr)
 		(*str)++;
 	}
 	if (**str == 's')
-		return (ftstr(argptr, ' ', i));
+		ftstr(argptr, ' ', i);
 	if (**str == 'd' || **str == 'i')
-		return (ftint(argptr, ' '));
+		ftint(argptr, ' ');*/
 	return (0);
 }

@@ -10,17 +10,18 @@
 #                                                                              #
 # **************************************************************************** #
 
-CC				= cc
-CFLAGS			= -Wall -Wextra -Werror -I./
+CC				= gcc
+CFLAGS			= -Wall -Wextra -I./ #-Werror
 RM				= rm -fr
 
 NAME			= libftprintf.a
 HEADER			= ft_printf.h
+EXE				= ft_printf
 
-SOURCES			= srcs/ft_printf.c srcs/ft_printloop.c srcs/help.c srcs/functs.c  \
-				srcs/ft_itoa.c srcs/action.c srcs/fts.c srcs/functsbonus.c srcs/prefts.c
-
-BONUS			=  *.c
+SOURCES			= srcs/ft_printf.c srcs/ft_printloop.c srcs/help.c srcs/ft_utils_2.c  \
+				srcs/ft_itoa.c srcs/action.c srcs/ft_types.c \
+				srcs/ft_split.c srcs/ft_utils.c
+BONUS			=  srcs/*.c
 
 SOURCES_O		= $(SOURCES:srcs/%.c=objs/%.o)
 BONUS_O		= $(BONUS:srcs/%.c=objs/%.o)
@@ -33,8 +34,8 @@ $(NAME):		$(SOURCES_O)
 objs:
 	mkdir -p objs
 
-run:
-	gcc libftprintf.a -o ft_printf && ./ft_printf
+run:		${NAME}
+	clear && gcc ${NAME} -o ${EXE} && ./${EXE}.exe
 
 objs/%.o: srcs/%.c
 	${CC} ${CFLAGS} -c $^ -o $@
@@ -49,9 +50,6 @@ fclean:			clean
 	$(RM) $(NAME)
 
 re:				fclean $(NAME)
-
-norminette:
-	clear && norminette srcs/*
 
 rebonus:		fclean bonus
 

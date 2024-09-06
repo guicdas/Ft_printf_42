@@ -10,27 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-
-int	minuscond(char **c)
-{
-	if (**c == '-')
-	{
-		(*c)++;
-		return (1);
-	}
-	return (0);
-}
-
-int	spacecond(char **c)
-{
-	if (**c == ' ')
-	{
-		(*c)++;
-		return (1);
-	}
-	return (0);
-}
+#include "../ft_printf.h"
 
 int	numcond(char *c)
 {
@@ -48,19 +28,5 @@ int	numcond(char *c)
 	}
 	else if (*c == '0')
 		return (-1);
-	return (0);
-}
-
-int	zerocond(char **c)
-{
-	if (**c == '0')
-		return (1);
-	return (0);
-}
-
-int	pointcond(char **c)
-{
-	if (**c == '.')
-		return (1);
 	return (0);
 }

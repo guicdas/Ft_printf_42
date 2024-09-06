@@ -10,52 +10,36 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../ft_printf.h"
 
-int	minusaction(char **c, int ret, va_list argptr)
+void	minusaction(char **c, va_list argptr)
 {
-	int	nums;
-	int	tmfw;
+	int	nums = 0;
 
-	nums = numcond(*c);
+	//nums = numcond(*c);
+	(void)argptr;
 	if (nums != 0)
 	{
 		if (verif(c, nums))
 		{
-			tmfw = compare(c, argptr);
-			ret = tmfw + numaction(ret, nums - tmfw);
+			//tmfw = compare(c, argptr);
+			//ret = tmfw + numaction(ret, nums - tmfw);
 		}
 	}
-	else
-		ret = ret + compare(c, argptr);
-	return (ret);
+	//else
+		//data()->ret += compare(c, argptr);
 }
 
-int	action(char **c, va_list argptr, int nums, int maxt)
-{
-	int		i;
-	char	*arg;
-
-	arg = NULL;
-	if (verif(c, nums))
-	{
-		arg = precompare(c, argptr);
-		i = conta(arg);
-		if (i > 0)
-			arg = spaceaction((nums - i), arg, ' ', maxt);
-	}
-	return (write(1, arg, ft_strlen(arg)));
-}
 
 int	zeroaction(char **c, int ret, va_list argptr)
 {
-	int		nums;
+	int		nums = 0;
 	int		i;
 	char	*arg;
 
 	arg = NULL;
 	(*c)++;
-	nums = numcond(*c);
+	//	nums = numcond(*c);
 	if (nums != 0)
 	{
 		if (verif(c, nums))
@@ -72,13 +56,13 @@ int	zeroaction(char **c, int ret, va_list argptr)
 
 int	pointaction(char **c, int ret, va_list argptr, int maxtudo)
 {
-	int		nums;
+	int		nums = 0;
 	char	*arg;
 	int		i;
 
 	arg = NULL;
 	(*c)++;
-	nums = numcond(*c);
+//nums = numcond(*c);
 	if (nums != 0)
 	{
 		if (verif(c, nums))

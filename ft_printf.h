@@ -22,47 +22,49 @@
 # define HEXAL "0123456789abcdef"
 # define HEXAU "0123456789ABCDEF"
 
-//-------HELPER--FUNCTIONS---//
-size_t	ft_strlen(char *str);
-int		fun(va_list argptr, char *s, char c);
-int		nums(int n);
-int		conta(char *arg);
+typedef struct s_data{
+	int	ret;
+
+	int	minus;
+	int	space;
+	int	dot;
+	int	zero;
+	int	hash;
+	int	plus;
+}t_data;
+
+t_data *data(void);
+
+//-----	HELPER FUNCTIONS	-----//
 int		spaceflag(char **str, va_list argptr);
-int		numaction(int mfw, int ret);
 int		verif(char **c, int nums);
-int		flags(char **str, va_list argptr);
-int		compare(char **str, va_list argptr);
-//----------FTS--------------//
+
+//-----	FTS	-----//
 int		put_b_nbr(unsigned long long nbr, char *b, size_t bs);
-int		ftp(va_list argptr);
-int		ftchar(va_list argptr);
-int		ftstr(va_list argptr, char m, int max);
-int		ftint(va_list argptr, char m);
-//----------PRE-----------------//
-char	*precompare(char **str, va_list argptr);
-char	*prechar(va_list argptr);
-char	*prestr(va_list argptr);
-char	*preint(va_list argptr);
-char	*prexuint(va_list argptr, int bs, char *b);
-//----------ITOA---------------//
-char	*ft_itoa(long long n, int bs, char *b);
-char	*convet(long long n, char *str, int bs, char *b);
+void	ft_pointer(va_list argptr);
+void	ft_char(va_list argptr);
+void	ft_str(va_list argptr, char m, int max);
+void	ft_int(va_list argptr);
+int		f_uns(va_list argptr, char *s, char c);
+
 //----------ACTION-------------//
-int		minusaction(char **c, int ret, va_list argptr);
-int		action(char **c, va_list argptr, int nums, int maxt);
+void	minusaction(char **c, va_list argptr);
 int		zeroaction(char **c, int ret, va_list argptr);
 int		pointaction(char **c, int ret, va_list argptr, int maxtudo);
 char	*spaceaction(int mfw, char *arg, char k, int max);
-//----------------COND----------------//
-int		minuscond(char **c);
-int		spacecond(char **c);
-int		numcond(char *c);
-int		zerocond(char **c);
-int		pointcond(char **c);
-int		percentcond(char **c, int ret, va_list argptr);
 
 //-----	FUNCTIONS	-----//
-int		nonmfw(char **c, int ret, va_list argptr, int mfw);
-int		mfwpos(char **c, int ret, va_list argptr, int mfw);
-int		print_loop(char *c, int ret, va_list argptr);
 int		ft_printf(const char *c, ...);
+
+char	**ft_split(char const *s, char c, int index_split);
+void	token_loop(char *s, va_list argptr);
+int		is_specifier(char c, va_list argptr);
+
+//-----	UTILS	-----//
+void	*ft_calloc(size_t count, size_t size);
+void	ft_bzero(void *s, size_t len);
+void	*ft_memset(char *dest, int c, size_t len);
+size_t	ft_strlen(char *str);
+
+//--//
+char	*ft_itoa(long long n, int bs, char *b);

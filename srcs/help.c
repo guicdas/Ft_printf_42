@@ -10,14 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-
-int	numaction(int ret, int mfw)
-{
-	while (mfw-- > 0)
-		ret = ret + write(1, " ", 1);
-	return (ret);
-}
+#include "../ft_printf.h"
 
 int	verif(char **c, int nums)
 {
@@ -37,45 +30,30 @@ int	verif(char **c, int nums)
 	return (i);
 }
 
-int	flags(char **str, va_list argptr)
+int	is_specifier(char c, va_list argptr)
 {
-	if (**str == '#')
-	{
-		(*str)++;
-		if (**str == 'x')
-			return (fun(argptr, HEXAL, **str));
-		if (**str == 'X')
-			return (fun(argptr, HEXAU, **str));
-	}
-	else if (**str == '+')
-	{
-		(*str)++;
-		if (**str == 'd' || **str == 'i')
-			return (ftint(argptr, '+'));
-	}
+	if (c == 'd' || c == 'i')
+		ft_int(argptr);
+	else if (c == 's')
+		ft_str(argptr, 0, -2);
+	else if (c == '%')
+		data()->ret += write(1, "%", 1);
+	else if (c == 'p')
+		ft_pointer(argptr);
+	else if (c == 'c')
+		ft_char(argptr);
+	else if (c == 'u')
+		data()->ret += put_b_nbr(va_arg(argptr, unsigned int), DEX, 10);
+	else if (c == 'x')
+		data()->ret += put_b_nbr(va_arg(argptr, unsigned int), HEXAL, 16);
+	else if (c == 'X')
+		data()->ret += put_b_nbr(va_arg(argptr, unsigned int), HEXAU, 16);
 	else
-		if (**str == ' ')
-			return (spaceflag(str, argptr));
-	return (0);
+		return (0);
+	return (1);
 }
 
-int	compare(char **str, va_list argptr)
-{
-	if (**str == '%')
-		return (write(1, "%", 1));
-	if (**str == 'd' || **str == 'i')
-		return (ftint(argptr, 0));
-	if (**str == 's')
-		return (ftstr(argptr, 0, -2));
-	if (**str == 'p')
-		return (ftp(argptr));
-	if (**str == 'c')
-		return (ftchar(argptr));
-	if (**str == 'u')
-		return (put_b_nbr(va_arg(argptr, unsigned int), DEX, 10));
-	if (**str == 'x')
-		return (put_b_nbr(va_arg(argptr, unsigned int), HEXAL, 16));
+/*if (data()->hash && **str == 'x')
+		return (fun(argptr, HEXAL, **str));
 	if (**str == 'X')
-		return (put_b_nbr(va_arg(argptr, unsigned int), HEXAU, 16));
-	return (flags(str, argptr));
-}
+		return (fun(argptr, HEXAU, **str));*/

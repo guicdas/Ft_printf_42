@@ -63,6 +63,7 @@ void	ft_char(va_list argptr)
 	char	c;
 
 	c = va_arg(argptr, int);
+	printf("%c", c);
 	data()->ret += write(1, &c, 1);
 }
 

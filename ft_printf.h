@@ -48,9 +48,9 @@ void	ft_int(va_list argptr);
 int		f_uns(va_list argptr, char *s, char c);
 
 //----------ACTION-------------//
-void	minusaction(char **c, va_list argptr);
-int		zeroaction(char **c, int ret, va_list argptr);
-int		pointaction(char **c, int ret, va_list argptr, int maxtudo);
+void	minusaction(char **c);
+int		zeroaction(char **c, int ret);
+int		pointaction(char **c, int ret, int maxtudo);
 char	*spaceaction(int mfw, char *arg, char k, int max);
 
 //-----	FUNCTIONS	-----//

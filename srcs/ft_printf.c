@@ -27,10 +27,10 @@ int main(void)
 {
 	int	i;
 
-	i = ft_printf(".%d. abcdef%% .%d+2. \n", 10, 15);
+	i = ft_printf("%d %c .%d+2. \n", 10, 'p', 15);
 	printf("return ->%d\n", i);
-	i = printf(".%d. abcdef%% .%d+2. \n", 10, 15);
-	printf("return ->%#d\n", 25);
+	i = printf("%d %c .%d+2. \n", 10, 'p', 15);
+	printf("return ->%d\n", 25);
 }
 
 // i = ft_printf(".%d.%%. .%s+2. \n");

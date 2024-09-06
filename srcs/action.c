@@ -12,12 +12,11 @@
 
 #include "../ft_printf.h"
 
-void	minusaction(char **c, va_list argptr)
+void	minusaction(char **c)
 {
 	int	nums = 0;
 
 	//nums = numcond(*c);
-	(void)argptr;
 	if (nums != 0)
 	{
 		if (verif(c, nums))
@@ -31,7 +30,7 @@ void	minusaction(char **c, va_list argptr)
 }
 
 
-int	zeroaction(char **c, int ret, va_list argptr)
+int	zeroaction(char **c, int ret)
 {
 	int		nums = 0;
 	int		i;
@@ -44,7 +43,7 @@ int	zeroaction(char **c, int ret, va_list argptr)
 	{
 		if (verif(c, nums))
 		{
-			arg = precompare(c, argptr);
+			//arg = precompare(c, argptr);
 			i = ft_strlen(arg);
 			if (i != 0)
 				arg = spaceaction((nums - i), arg, '0', 1000);
@@ -54,7 +53,7 @@ int	zeroaction(char **c, int ret, va_list argptr)
 	return (ret);
 }
 
-int	pointaction(char **c, int ret, va_list argptr, int maxtudo)
+int	pointaction(char **c, int ret, int maxtudo)
 {
 	int		nums = 0;
 	char	*arg;
@@ -67,7 +66,7 @@ int	pointaction(char **c, int ret, va_list argptr, int maxtudo)
 	{
 		if (verif(c, nums))
 		{
-			arg = precompare(c, argptr);
+			//arg = precompare(c, argptr);
 			i = ft_strlen(arg);
 			if (maxtudo > 0)
 				arg = spaceaction((maxtudo - i), arg, ' ', nums);

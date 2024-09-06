@@ -53,7 +53,9 @@ int	is_specifier(char c, va_list argptr)
 	return (1);
 }
 
-/*if (data()->hash && **str == 'x')
+/*
+if (data()->hash && **str == 'x')
 		return (fun(argptr, HEXAL, **str));
-	if (**str == 'X')
-		return (fun(argptr, HEXAU, **str));*/
+if (**str == 'X')
+	return (fun(argptr, HEXAU, **str));
+*/

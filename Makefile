@@ -35,7 +35,7 @@ objs:
 	mkdir -p objs
 
 run:		${NAME}
-	clear && ${CC} ${NAME} -o ${EXE} && ./${EXE}.exe
+	clear && ${CC} ${NAME} -o ${EXE} && ./${EXE}
 
 objs/%.o: srcs/%.c
 	${CC} ${CFLAGS} -c $^ -o $@

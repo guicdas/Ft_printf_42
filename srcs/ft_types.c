@@ -20,7 +20,7 @@ static void	manage_tokens(void)
 		data()->ret += write(1, " ", 1);
 }
 
-int	ft_int(va_list ap)
+void	ft_int(va_list ap)
 {
 	long long	t;
 
@@ -33,17 +33,14 @@ int	ft_int(va_list ap)
 	else
 		manage_tokens();
 	data()->ret += put_b_nbr(t, DEX, 10);
-	return (data()->ret);
 }
 
-int	ft_char(va_list ap)
+void	ft_char(va_list ap)
 {
 	char	c;
 
 	c = va_arg(ap, int);
-	//printf("\ncharr ->%d\n", c);
 	data()->ret += write(1, &c, 1);
-	return (data()->ret);
 }
 
 void	ft_str(va_list ap, char m)

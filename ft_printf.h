@@ -43,9 +43,9 @@ int		spaceflag(char **str, va_list argptr);
 //-----	FTS	-----//
 int		put_b_nbr(unsigned long long nbr, char *b, size_t bs);
 void	ft_pointer(va_list argptr);
-int	ft_char(va_list argptr);
+void	ft_char(va_list argptr);
 void	ft_str(va_list argptr, char m);
-int	ft_int(va_list argptr);
+void		ft_int(va_list argptr);
 int		f_uns(va_list argptr, char *s, char c);
 
 //----------ACTION-------------//

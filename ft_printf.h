@@ -27,37 +27,27 @@ typedef struct s_data{
 
 	int	minus;
 	int	space;
-	int	dot;
-	int	zero;
+	int	character;
 	int	hash;
 	int	plus;
+	int	precision;
 
 	int	has_flags;
 }t_data;
 
 t_data *data(void);
 
-//-----	HELPER FUNCTIONS	-----//
-int		spaceflag(char **str, va_list argptr);
+//-----	PRINTF	-----//
+int		ft_printf(const char *c, ...);
+void	token_loop(char *s, va_list ap);
 
-//-----	FTS	-----//
+//-----	TYPES	-----//
 int		put_b_nbr(unsigned long long nbr, char *b, size_t bs);
 void	ft_pointer(va_list argptr);
 void	ft_char(va_list argptr);
 void	ft_str(va_list argptr, char m);
-void		ft_int(va_list argptr);
-int		f_uns(va_list argptr, char *s, char c);
-
-//----------ACTION-------------//
-int		zeroaction(char **c, int ret);
-int		pointaction(char **c, int ret, int maxtudo);
-char	*spaceaction(int mfw, char *arg, char k, int max);
-
-//-----	FUNCTIONS	-----//
-int		ft_printf(const char *c, ...);
-
-void	token(char **s, va_list argptr);
-void	token_loop(char *s, va_list ap);
+void	ft_int(va_list argptr);
+void	f_uns(va_list argptr, char *s);
 
 //-----	UTILS	-----//
 void	*ft_calloc(size_t count, size_t size);

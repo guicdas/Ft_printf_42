@@ -12,6 +12,18 @@
 
 #include "../ft_printf.h"
 
+static void	get_precision(char *s)
+{
+	(*s)++;		//verseggffault
+	//if (*s > '0' && *s <= '9')
+	while (*s >= '0' && *s <= '9')
+	{
+		data()->precision = (data()->precision * 10) + *s - 48;
+		(*s)++;
+	}
+	//else if (*s == '0')
+}
+
 static int	is_token(char *s)
 {
 	if (*s == '-') //Left-justify within the given field width;
@@ -19,9 +31,9 @@ static int	is_token(char *s)
 	else if (*s == ' ')
 		data()->space = 1;
 	else if (*s == '.')
-		data()->dot = 1;
+		get_precision(s);
 	else if (*s == '0')
-		data()->zero = 1;
+		data()->character = '0';
 	else if (*s == '#')
 		data()->hash = 1;
 	else if (*s == '+')
@@ -47,35 +59,15 @@ static int	is_specifier(char *s, va_list argptr)
 	else if (*s == 'u')
 		data()->ret += put_b_nbr(va_arg(argptr, unsigned int), DEX, 10);
 	else if (*s == 'x')
-		data()->ret += put_b_nbr(va_arg(argptr, unsigned int), HEXAL, 16);
+		f_uns(argptr, HEXAL);
 	else if (*s == 'X')
-		data()->ret += put_b_nbr(va_arg(argptr, unsigned int), HEXAU, 16);
+		f_uns(argptr, HEXAU);
 	else
 		return (0);
 	return (1);
 }
 
-/*
-if (data()->hash && **str == 'x')
-		return (fun(argptr, HEXAL, **str));
-if (**str == 'X')
-	return (fun(argptr, HEXAU, **str));
-*/
-
-int	write_string(char **s)
-{
-	size_t	i;
-
-	i = 0;
-	while (*s)
-	{
-		i += write(1, &s, 1);
-		(*s)++;
-	}
-	return (i);
-}
-
-void	token(char **s, va_list ap)
+static void	token(char **s, va_list ap)
 {
 	size_t	i;
 
@@ -90,8 +82,7 @@ void	token(char **s, va_list ap)
 	{
 		i++;
 		(*s)++;
-	}
-	
+	}	
 }
 
 void	token_loop(char *s, va_list ap)

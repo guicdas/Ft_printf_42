@@ -12,14 +12,6 @@
 
 #include "../ft_printf.h"
 
-static void	manage_tokens(void)
-{
-	if (data()->plus)
-		data()->ret += write(1, "+", 1);
-	if (data()->space && !data()->plus)
-		data()->ret += write(1, " ", 1);
-}
-
 void	ft_int(va_list ap)
 {
 	long long	t;
@@ -31,7 +23,12 @@ void	ft_int(va_list ap)
 		t *= -1;
 	}
 	else
-		manage_tokens();
+	{
+		if (data()->plus)
+			data()->ret += write(1, "+", 1);
+		if (data()->space && !data()->plus)
+			data()->ret += write(1, " ", 1);
+	}
 	data()->ret += put_b_nbr(t, DEX, 10);
 }
 
@@ -70,15 +67,23 @@ void	ft_pointer(va_list ap)
 	s = va_arg(ap, unsigned long);
 	if (!s)
 		data()->ret += write(1, "(nil)", 5);
-	data()->ret += write (1, "0x", 2) + put_b_nbr(s, HEXAL, 16);
+	data()->ret += write(1, "0x", 2) + put_b_nbr(s, HEXAL, 16);
 }
 
-int	put_b_nbr(unsigned long long nbr, char *b, size_t bs)
+void	f_uns(va_list ap, char *s)
 {
-	int	i;
+	unsigned long long	t;
 
-	i = 0;
-	if (nbr >= bs)
-		i = put_b_nbr((nbr / bs), b, bs);
-	return (i + write(1, &b[nbr % bs], 1));
+	t = va_arg(ap, unsigned int);
+	if (t != 0)
+	{
+		if (data()->hash)
+		{
+			if (s[10] == 'a')
+				data()->ret += write(1, "0x", 2);
+			else
+				data()->ret += write(1, "0X", 2);
+		}
+	}
+	data()->ret += put_b_nbr(t, s, 16);
 }

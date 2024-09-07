@@ -12,24 +12,6 @@
 
 #include "../ft_printf.h"
 
-void	minusaction(char **c)
-{
-	int	nums = 0;
-
-	//nums = numcond(*c);
-	if (nums != 0)
-	{
-		if (verif(c, nums))
-		{
-			//tmfw = compare(c, argptr);
-			//ret = tmfw + numaction(ret, nums - tmfw);
-		}
-	}
-	//else
-		//data()->ret += compare(c, argptr);
-}
-
-
 int	zeroaction(char **c, int ret)
 {
 	int		nums = 0;
@@ -41,13 +23,12 @@ int	zeroaction(char **c, int ret)
 	//	nums = numcond(*c);
 	if (nums != 0)
 	{
-		if (verif(c, nums))
-		{
-			//arg = precompare(c, argptr);
-			i = ft_strlen(arg);
-			if (i != 0)
-				arg = spaceaction((nums - i), arg, '0', 1000);
-		}
+
+		//arg = precompare(c, argptr);
+		i = ft_strlen(arg);
+		if (i != 0)
+			arg = spaceaction((nums - i), arg, '0', 1000);
+
 		return (ret + (write(1, arg, ft_strlen(arg))));
 	}
 	return (ret);
@@ -61,20 +42,17 @@ int	pointaction(char **c, int ret, int maxtudo)
 
 	arg = NULL;
 	(*c)++;
-//nums = numcond(*c);
+	//nums = numcond(*c);
 	if (nums != 0)
 	{
-		if (verif(c, nums))
-		{
-			//arg = precompare(c, argptr);
-			i = ft_strlen(arg);
-			if (maxtudo > 0)
-				arg = spaceaction((maxtudo - i), arg, ' ', nums);
-			else if (nums > i)
-				arg = spaceaction(0, arg, ' ', 1000);
-			else
-				arg = spaceaction((nums - i), arg, ' ', nums);
-		}
+		//arg = precompare(c, argptr);
+		i = ft_strlen(arg);
+		if (maxtudo > 0)
+			arg = spaceaction((maxtudo - i), arg, ' ', nums);
+		else if (nums > i)
+			arg = spaceaction(0, arg, ' ', 1000);
+		else
+			arg = spaceaction((nums - i), arg, ' ', nums);
 		return (ret + (write(1, arg, ft_strlen(arg))));
 	}
 	return (ret);

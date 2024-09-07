@@ -20,11 +20,11 @@ static void	manage_tokens(void)
 		data()->ret += write(1, " ", 1);
 }
 
-void	ft_int(va_list argptr)
+int	ft_int(va_list ap)
 {
 	long long	t;
 
-	t = va_arg(argptr, int);
+	t = va_arg(ap, int);
 	if (t < 0)
 	{
 		data()->ret += write(1, "-", 1);
@@ -33,19 +33,29 @@ void	ft_int(va_list argptr)
 	else
 		manage_tokens();
 	data()->ret += put_b_nbr(t, DEX, 10);
+	return (data()->ret);
 }
 
-void	ft_str(va_list argptr, char m, int max)
+int	ft_char(va_list ap)
+{
+	char	c;
+
+	c = va_arg(ap, int);
+	//printf("\ncharr ->%d\n", c);
+	data()->ret += write(1, &c, 1);
+	return (data()->ret);
+}
+
+void	ft_str(va_list ap, char m)
 {
 	char	*s;
 	int		i;
 
 	i = 0;
-	s = va_arg(argptr, char *);
+	s = va_arg(ap, char *);
 	if (!s)
 		data()->ret += write(1, "(null)", 6);
-	if (max == -1)
-		data()->ret += write(1, 0, 0);
+	//data()->ret += write(1, 0, 0);
 	if (m == ' ')
 	{
 		while (s[i] == ' ')
@@ -53,25 +63,14 @@ void	ft_str(va_list argptr, char m, int max)
 		if (s[i] != '-' && i != 0)
 			data()->ret += write(1, "+", 1);
 	}
-	if (max > 0)
-		data()->ret += write(1, s, max);
 	data()->ret += write(1, s, ft_strlen(s));
 }
 
-void	ft_char(va_list argptr)
-{
-	char	c;
-
-	c = va_arg(argptr, int);
-	printf("%c", c);
-	data()->ret += write(1, &c, 1);
-}
-
-void	ft_pointer(va_list argptr)
+void	ft_pointer(va_list ap)
 {
 	unsigned long	s;
 
-	s = va_arg(argptr, unsigned long);
+	s = va_arg(ap, unsigned long);
 	if (!s)
 		data()->ret += write(1, "(nil)", 5);
 	data()->ret += write (1, "0x", 2) + put_b_nbr(s, HEXAL, 16);

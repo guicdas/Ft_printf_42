@@ -12,13 +12,19 @@
 
 #include "../ft_printf.h"
 
+t_data *data(void){
+	static t_data d;
+
+	return (&d);
+}
+
 int	ft_printf(const char *s, ...)
 {
-	va_list	argptr;
+	va_list	ap;
 
-	va_start(argptr, s);
-	token_loop((char *)s, argptr);
-	va_end(argptr);
+	va_start(ap, s);
+	token_loop((char *)s, ap);
+	va_end(ap);
 
 	return (data()->ret);
 }
@@ -27,12 +33,13 @@ int main(void)
 {
 	int	i;
 
-	i = ft_printf("%d %c .%d+2. \n", 10, 'p', 15);
+	i = ft_printf("%c %d", 'p', 10);
+	printf("return ->%d\n--------------------\n", i);
+	i = printf("%c %d", 'p', 10);
 	printf("return ->%d\n", i);
-	i = printf("%d %c .%d+2. \n", 10, 'p', 15);
-	printf("return ->%d\n", 25);
 }
 
-// i = ft_printf(".%d.%%. .%s+2. \n");
-// i = ft_printf("%.%");
+// (".%d .mk %cei%+ . %%\n", 10, 'p');
 // (%sotokens %)
+// %token%
+// ("%.%%");

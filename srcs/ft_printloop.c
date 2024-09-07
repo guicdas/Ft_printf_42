@@ -12,97 +12,98 @@
 
 #include "../ft_printf.h"
 
-t_data *data(void){
-	static t_data d;
-
-	return (&d);
-}
-
-static char	*line_treat(char *str, char *new, size_t *index)
+static int	is_token(char *s)
 {
-	size_t	i;
-	size_t	j;
-
-	i = (str[0] == '%');
-	//i += (i && (str[1] == '%'));
-	if (i)
-	{
-		j = *index;
-		new[j++] = '\2';
-		//if (i == 2)
-		//	new[j++] = str[1];
-		index[0] = j;
-	}
-	return (str + i);
-}
-
-static char	*line_dup(char *str, char *new)
-{
-	size_t	i;
-
-	i = 0;
-	while (*str)
-	{
-		str = line_treat(str, new, &i);
-		new[i++] = *str;
-		str++;
-	}
-	return (new);
-}
-
-static int	is_token(char c)
-{
-	if (c == '-') //Left-justify within the given field width;
+	if (*s == '-') //Left-justify within the given field width;
 		data()->minus = 1;
-	else if (c == ' ')
+	else if (*s == ' ')
 		data()->space = 1;
-	else if (c == '.')
+	else if (*s == '.')
 		data()->dot = 1;
-	else if (c == '0')
+	else if (*s == '0')
 		data()->zero = 1;
-	else if (c == '#')
+	else if (*s == '#')
 		data()->hash = 1;
-	else if (c == '+')
+	else if (*s == '+')
 		data()->plus = 1;
+	else
+		return (0);
+	data()->has_flags = 1;
+	return (1);
+}
+
+static int	is_specifier(char *s, va_list argptr)
+{
+	if (*s == 'd' || *s == 'i')
+		ft_int(argptr);
+	else if (*s == 's')
+		ft_str(argptr, 0);
+	else if (*s == '%' && data()->has_flags == 0)
+		data()->ret += write(1, "%", 1);
+	else if (*s == 'p')
+		ft_pointer(argptr);
+	else if (*s == 'c')
+		ft_char(argptr);
+	else if (*s == 'u')
+		data()->ret += put_b_nbr(va_arg(argptr, unsigned int), DEX, 10);
+	else if (*s == 'x')
+		data()->ret += put_b_nbr(va_arg(argptr, unsigned int), HEXAL, 16);
+	else if (*s == 'X')
+		data()->ret += put_b_nbr(va_arg(argptr, unsigned int), HEXAU, 16);
 	else
 		return (0);
 	return (1);
 }
 
-static void	token(char *s, va_list argptr)
+/*
+if (data()->hash && **str == 'x')
+		return (fun(argptr, HEXAL, **str));
+if (**str == 'X')
+	return (fun(argptr, HEXAU, **str));
+*/
+
+int	write_string(char **s)
 {
 	size_t	i;
 
 	i = 0;
-	printf("\nTOKEN ->%s\n", s);
-	while (s[i] && is_token(s[i]))
+	while (*s)
 	{
-		//printf("found token.\n");
-		i++;
+		i += write(1, &s, 1);
+		(*s)++;
 	}
-	if (is_specifier(s[i], argptr))
-	{
-		//printf("\nfound specifier.\n");
-		i++;
-	}
-	else
-		data()->ret += write(1, s, ft_strlen(s));
-	if (i < ft_strlen(s))
-	{
-		while (s[i])
-			data()->ret += write(1, &s[i++], 1);
-	}
+	return (i);
 }
 
-void	token_loop(char *s, va_list argptr)
+void	token(char **s, va_list ap)
 {
-	char	**tokens;
-	char	*dup_array;
 	size_t	i;
 
-	dup_array = line_dup(s, ft_calloc(2, ft_strlen(s)));
-	tokens = ft_split(dup_array, '\2', 0);
-	i = -1;
-	while (tokens[++i])
-		token(tokens[i], argptr);
+	i = 0;
+	(*s)++;
+	while (*s && is_token(*s))
+	{
+		i++;
+		(*s)++;
+	}
+	if (is_specifier(*s, ap))
+	{
+		i++;
+		(*s)++;
+	}
+	
+}
+
+void	token_loop(char *s, va_list ap)
+{
+	while (*s)
+	{
+		if (*s == '%')
+			token(&s, ap);
+		else
+		{
+			data()->ret += write(1, s, 1);
+			s++;
+		}
+	}
 }

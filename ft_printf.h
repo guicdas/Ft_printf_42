@@ -31,6 +31,8 @@ typedef struct s_data{
 	int	hash;
 	int	plus;
 	int	precision;
+	int	zero;
+	int	dot;
 
 	int	has_flags;
 }t_data;
@@ -39,15 +41,15 @@ t_data *data(void);
 
 //-----	PRINTF	-----//
 int		ft_printf(const char *c, ...);
-void	token_loop(char *s, va_list ap);
+void	token_loop(const char *s, va_list *ap);
 
 //-----	TYPES	-----//
 int		put_b_nbr(unsigned long long nbr, char *b, size_t bs);
-void	ft_pointer(va_list argptr);
-void	ft_char(va_list argptr);
-void	ft_str(va_list argptr, char m);
-void	ft_int(va_list argptr);
-void	f_uns(va_list argptr, char *s);
+void	ft_pointer(va_list *ap);
+void	ft_char(va_list *ap);
+void	ft_str(va_list *ap, char m);
+void	ft_int(va_list *ap);
+void	f_uns(va_list *ap, char *s, char c);
 
 //-----	UTILS	-----//
 void	*ft_calloc(size_t count, size_t size);

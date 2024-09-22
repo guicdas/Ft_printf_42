@@ -10,13 +10,13 @@
 #                                                                              #
 # **************************************************************************** #
 
-CC				= cc
+CC				= gcc
 CFLAGS			= -Wall -Wextra -Werror -I./ # -fsanitize=address
 RM				= rm -fr
 
 NAME			= libftprintf.a
 HEADER			= ft_printf.h
-EXE				= ft_printf
+EXE				= ft_printf.exe
 
 SOURCES			= srcs/ft_printf.c srcs/ft_printloop.c srcs/ft_utils_2.c  \
 				 srcs/ft_types.c srcs/ft_utils.c

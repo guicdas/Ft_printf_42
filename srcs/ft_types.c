@@ -12,41 +12,44 @@
 
 #include "../ft_printf.h"
 
-void	ft_int(va_list ap)
+static void	manage_tokens(void)
+{
+	if (data()->plus)
+		data()->ret += write(1, "+", 1);
+	if (data()->space && !data()->plus)
+		data()->ret += write(1, " ", 1);
+}
+
+void	ft_int(va_list *ap)
 {
 	long long	t;
 
-	t = va_arg(ap, int);
+	t = va_arg(*ap, int);
 	if (t < 0)
 	{
 		data()->ret += write(1, "-", 1);
 		t *= -1;
 	}
 	else
-	{
-		if (data()->plus)
-			data()->ret += write(1, "+", 1);
-		if (data()->space && !data()->plus)
-			data()->ret += write(1, " ", 1);
-	}
+		manage_tokens();
 	data()->ret += put_b_nbr(t, DEX, 10);
 }
 
-void	ft_char(va_list ap)
+void	ft_char(va_list *ap)
 {
 	char	c;
 
-	c = va_arg(ap, int);
+	c = va_arg(*ap, int);
 	data()->ret += write(1, &c, 1);
 }
 
-void	ft_str(va_list ap, char m)
+void	ft_str(va_list *ap, char m)
 {
 	char	*s;
 	int		i;
 
 	i = 0;
-	s = va_arg(ap, char *);
+	s = va_arg(*ap, char *);
 	if (!s)
 		data()->ret += write(1, "(null)", 6);
 	//data()->ret += write(1, 0, 0);
@@ -60,30 +63,22 @@ void	ft_str(va_list ap, char m)
 	data()->ret += write(1, s, ft_strlen(s));
 }
 
-void	ft_pointer(va_list ap)
+void	ft_pointer(va_list *ap)
 {
 	unsigned long	s;
 
-	s = va_arg(ap, unsigned long);
+	s = va_arg(*ap, unsigned long);
 	if (!s)
 		data()->ret += write(1, "(nil)", 5);
-	data()->ret += write(1, "0x", 2) + put_b_nbr(s, HEXAL, 16);
+	data()->ret += write (1, "0x", 2) + put_b_nbr(s, HEXAL, 16);
 }
 
-void	f_uns(va_list ap, char *s)
+int	put_b_nbr(unsigned long long nbr, char *b, size_t bs)
 {
-	unsigned long long	t;
+	int	i;
 
-	t = va_arg(ap, unsigned int);
-	if (t != 0)
-	{
-		if (data()->hash)
-		{
-			if (s[10] == 'a')
-				data()->ret += write(1, "0x", 2);
-			else
-				data()->ret += write(1, "0X", 2);
-		}
-	}
-	data()->ret += put_b_nbr(t, s, 16);
+	i = 0;
+	if (nbr >= bs)
+		i = put_b_nbr((nbr / bs), b, bs);
+	return (i + write(1, &b[nbr % bs], 1));
 }

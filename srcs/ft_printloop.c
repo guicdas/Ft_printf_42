@@ -24,14 +24,14 @@ static void	get_precision(char *s)
 	//else if (*s == '0')
 }
 
-static int	is_token(char *s)
+static int	is_token(const char *s)
 {
 	if (*s == '-') //Left-justify within the given field width;
 		data()->minus = 1;
 	else if (*s == ' ')
 		data()->space = 1;
 	else if (*s == '.')
-		get_precision(s);
+		get_precision((char *)s);
 	else if (*s == '0')
 		data()->character = '0';
 	else if (*s == '#')
@@ -44,30 +44,43 @@ static int	is_token(char *s)
 	return (1);
 }
 
-static int	is_specifier(char *s, va_list argptr)
+static int	is_specifier(const char *s, va_list *ap)
 {
 	if (*s == 'd' || *s == 'i')
-		ft_int(argptr);
+		ft_int(ap);
 	else if (*s == 's')
-		ft_str(argptr, 0);
+		ft_str(ap, 0);
 	else if (*s == '%' && data()->has_flags == 0)
 		data()->ret += write(1, "%", 1);
 	else if (*s == 'p')
-		ft_pointer(argptr);
+		ft_pointer(ap);
 	else if (*s == 'c')
-		ft_char(argptr);
+		ft_char(ap);
 	else if (*s == 'u')
-		data()->ret += put_b_nbr(va_arg(argptr, unsigned int), DEX, 10);
+		data()->ret += put_b_nbr(va_arg(*ap, unsigned int), DEX, 10);
 	else if (*s == 'x')
-		f_uns(argptr, HEXAL);
+		f_uns(ap, HEXAL, 'x');
 	else if (*s == 'X')
-		f_uns(argptr, HEXAU);
+		f_uns(ap, HEXAU, 'X');
 	else
 		return (0);
 	return (1);
 }
 
-static void	token(char **s, va_list ap)
+int	write_string(char **s)
+{
+	size_t	i;
+
+	i = 0;
+	while (*s)
+	{
+		i += write(1, &s, 1);
+		(*s)++;
+	}
+	return (i);
+}
+
+static void	token(const char **s, va_list *ap)
 {
 	size_t	i;
 
@@ -82,10 +95,11 @@ static void	token(char **s, va_list ap)
 	{
 		i++;
 		(*s)++;
-	}	
+	}
+	
 }
 
-void	token_loop(char *s, va_list ap)
+void	token_loop(const char *s, va_list *ap)
 {
 	while (*s)
 	{

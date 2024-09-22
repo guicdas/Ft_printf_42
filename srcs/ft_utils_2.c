@@ -12,12 +12,43 @@
 
 #include "../ft_printf.h"
 
-int	put_b_nbr(unsigned long long nbr, char *b, size_t bs)
+void	f_uns(va_list *ap, char *s, char c)
 {
+	unsigned long long	t;
+
+	t = va_arg(*ap, unsigned int);
+	if (t != 0)
+	{
+		if (c == 'x')
+			data()->ret += write (1, "0x", 2);
+		if (c == 'X')
+			data()->ret += write (1, "0X", 2);
+	}
+	data()->ret += put_b_nbr(t, s, 16);
+}
+
+int	spaceflag(char **str, va_list *ap)
+{
+	(void)str;
+	(void)ap;
+	/*
+	int	nums;
 	int	i;
 
 	i = 0;
-	if (nbr >= bs)
-		i = put_b_nbr((nbr / bs), b, bs);
-	return (i + write(1, &b[nbr % bs], 1));
+	(*str)++;
+	//nums = numcond(*str);
+	i = nums;
+	if (i == -1)
+		nums = 1;
+	while (nums > 0)
+	{
+		nums = nums / 10;
+		(*str)++;
+	}
+	if (**str == 's')
+		ftstr(argptr, ' ', i);
+	if (**str == 'd' || **str == 'i')
+		ftint(argptr, ' ');*/
+	return (0);
 }

@@ -12,19 +12,13 @@
 
 #include "../ft_printf.h"
 
-static void	manage_tokens(void)
-{
-	if (data()->plus)
-		data()->ret += write(1, "+", 1);
-	if (data()->space && !data()->plus)
-		data()->ret += write(1, " ", 1);
-}
-
 void	ft_int(va_list *ap)
 {
 	long long	t;
 
 	t = va_arg(*ap, int);
+	if (data()->dot)
+	{	print_precision(count_number_length(t));printf("asdas");}
 	if (t < 0)
 	{
 		data()->ret += write(1, "-", 1);

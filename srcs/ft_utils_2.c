@@ -27,28 +27,34 @@ void	f_uns(va_list *ap, char *s, char c)
 	data()->ret += put_b_nbr(t, s, 16);
 }
 
-int	spaceflag(char **str, va_list *ap)
+int	count_number_length(long long num)
 {
-	(void)str;
-	(void)ap;
-	/*
-	int	nums;
-	int	i;
-
-	i = 0;
-	(*str)++;
-	//nums = numcond(*str);
-	i = nums;
-	if (i == -1)
-		nums = 1;
-	while (nums > 0)
+	int counter = 0;
+	while (num)
 	{
-		nums = nums / 10;
-		(*str)++;
+		num /= 10;
+		counter++;
+			printf("num: %lld\n", num);
 	}
-	if (**str == 's')
-		ftstr(argptr, ' ', i);
-	if (**str == 'd' || **str == 'i')
-		ftint(argptr, ' ');*/
-	return (0);
+	printf("counter: %d\n", counter);
+	return (counter);
+}
+
+void	print_precision(int num)
+{
+	while (data()->precision - num > 0)
+	{
+		if (data()->space)
+			data()->ret += write(1, " ", 1);
+		else
+			data()->ret += write(1, "0", 1);
+	}
+}
+
+void	manage_tokens(void)
+{
+	if (data()->plus)
+		data()->ret += write(1, "+", 1);
+	if (data()->space && !data()->plus)
+		data()->ret += write(1, " ", 1);
 }

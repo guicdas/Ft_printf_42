@@ -14,24 +14,23 @@
 
 static void	get_precision(char *s)
 {
-	(*s)++;		//verseggffault
-	//if (*s > '0' && *s <= '9')
-	while (*s >= '0' && *s <= '9')
+	while (*s && (*s >= '0' && *s <= '9'))
 	{
-		data()->precision = (data()->precision * 10) + *s - 48;
+		data()->precision *= 10;
+		data()->precision += *s - 48;
 		(*s)++;
 	}
-	//else if (*s == '0')
+	data()->dot = 1;
 }
 
-static int	is_token(const char *s)
+ int	set_token(char *s)
 {
 	if (*s == '-') //Left-justify within the given field width;
 		data()->minus = 1;
 	else if (*s == ' ')
 		data()->space = 1;
 	else if (*s == '.')
-		get_precision((char *)s);
+		get_precision(++s);
 	else if (*s == '0')
 		data()->character = '0';
 	else if (*s == '#')
@@ -44,7 +43,7 @@ static int	is_token(const char *s)
 	return (1);
 }
 
-static int	is_specifier(const char *s, va_list *ap)
+ int	is_specifier(char *s, va_list *ap)
 {
 	if (*s == 'd' || *s == 'i')
 		ft_int(ap);
@@ -67,39 +66,15 @@ static int	is_specifier(const char *s, va_list *ap)
 	return (1);
 }
 
-int	write_string(char **s)
+static void	token(char **s, va_list *ap)
 {
-	size_t	i;
-
-	i = 0;
-	while (*s)
-	{
-		i += write(1, &s, 1);
+	while (*s && set_token(*s))
 		(*s)++;
-	}
-	return (i);
-}
-
-static void	token(const char **s, va_list *ap)
-{
-	size_t	i;
-
-	i = 0;
-	(*s)++;
-	while (*s && is_token(*s))
-	{
-		i++;
-		(*s)++;
-	}
 	if (is_specifier(*s, ap))
-	{
-		i++;
 		(*s)++;
-	}
-	
 }
 
-void	token_loop(const char *s, va_list *ap)
+void	token_loop(char *s, va_list *ap)
 {
 	while (*s)
 	{
@@ -108,7 +83,7 @@ void	token_loop(const char *s, va_list *ap)
 		else
 		{
 			data()->ret += write(1, s, 1);
-			s++;
+			(*s)++;
 		}
 	}
 }

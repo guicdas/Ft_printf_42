@@ -41,7 +41,10 @@ t_data *data(void);
 
 //-----	PRINTF	-----//
 int		ft_printf(const char *c, ...);
-void	token_loop(const char *s, va_list *ap);
+void	token_loop(char *s, va_list *ap);
+void	manage_tokens(void);
+int		count_number_length(long long num);
+void	print_precision(int num);
 
 //-----	TYPES	-----//
 int		put_b_nbr(unsigned long long nbr, char *b, size_t bs);

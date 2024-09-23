@@ -23,7 +23,7 @@ int	ft_printf(const char *s, ...)
 	va_list	ap;
 
 	va_start(ap, s);
-	token_loop(s, &ap);
+	token_loop((char *)s, &ap);
 	va_end(ap);
 
 	return (data()->ret);
@@ -33,10 +33,10 @@ int main(void)
 {
 	int	i;
 
-	i = ft_printf("%c %d", 'p', 10);
-	printf(" return ->%d\n--------------------\n", i);
-	i = printf("%c %d", 'p', 10);
-	printf(" return ->%d\n", i);
+	i = ft_printf("|%.5d|", -10);
+	printf("\nreturn ->%d\n--------------------\n", i);
+	i = printf("|%.5d|", -10);
+	printf("\nreturn ->%d\n", i);
 }
 
 // (".%d .mk %cei%+ . %%\n", 10, 'p');

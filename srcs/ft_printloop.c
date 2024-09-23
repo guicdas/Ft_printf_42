@@ -12,30 +12,33 @@
 
 #include "../ft_printf.h"
 
-static void	get_precision(char *s)
+ void	get_precision(char **s)
 {
-	while (*s && (*s >= '0' && *s <= '9'))
+	(*s)++;
+	while (**s && (**s >= '0' && **s <= '9'))
 	{
 		data()->precision *= 10;
-		data()->precision += *s - 48;
+		data()->precision += **s - 48;
 		(*s)++;
 	}
+	//printf("precision:%d\n", data()->precision);
 	data()->dot = 1;
+	(*s)--;
 }
 
- int	set_token(char *s)
+ int	set_token(char **s)
 {
-	if (*s == '-') //Left-justify within the given field width;
+	if (**s == '-') //Left-justify within the given field width;
 		data()->minus = 1;
-	else if (*s == ' ')
+	else if (**s == ' ')
 		data()->space = 1;
-	else if (*s == '.')
-		get_precision(++s);
-	else if (*s == '0')
-		data()->character = '0';
-	else if (*s == '#')
+	else if (**s == '.')
+		get_precision(s);
+	else if (**s == '0')
+		data()->zero = 1;
+	else if (**s == '#')
 		data()->hash = 1;
-	else if (*s == '+')
+	else if (**s == '+')
 		data()->plus = 1;
 	else
 		return (0);
@@ -43,23 +46,23 @@ static void	get_precision(char *s)
 	return (1);
 }
 
- int	is_specifier(char *s, va_list *ap)
+ int	is_specifier(char **s, va_list *ap)
 {
-	if (*s == 'd' || *s == 'i')
+	if (**s == 'd' || **s == 'i')
 		ft_int(ap);
-	else if (*s == 's')
+	else if (**s == 's')
 		ft_str(ap, 0);
-	else if (*s == '%' && data()->has_flags == 0)
+	else if (**s == '%' && data()->has_flags == 0)
 		data()->ret += write(1, "%", 1);
-	else if (*s == 'p')
+	else if (**s == 'p')
 		ft_pointer(ap);
-	else if (*s == 'c')
+	else if (**s == 'c')
 		ft_char(ap);
-	else if (*s == 'u')
-		data()->ret += put_b_nbr(va_arg(*ap, unsigned int), DEX, 10);
-	else if (*s == 'x')
+	else if (**s == 'u')
+		put_b_nbr(va_arg(*ap, unsigned int), DEX, 10);
+	else if (**s == 'x')
 		f_uns(ap, HEXAL, 'x');
-	else if (*s == 'X')
+	else if (**s == 'X')
 		f_uns(ap, HEXAU, 'X');
 	else
 		return (0);
@@ -68,22 +71,26 @@ static void	get_precision(char *s)
 
 static void	token(char **s, va_list *ap)
 {
-	while (*s && set_token(*s))
+	(*s)++;
+	while (**s && set_token(s))
 		(*s)++;
-	if (is_specifier(*s, ap))
+	if (is_specifier(s, ap))
 		(*s)++;
+	//printf("\nFLAGS ATIVADAS:\nprecision:%d\ndot:%d\nspace:%d\nult:%c.", data()->precision, data()->dot, data()->space, **s);
+	reset_flags();
 }
 
 void	token_loop(char *s, va_list *ap)
 {
 	while (*s)
 	{
+		//printf("\n->%c.", *s);
 		if (*s == '%')
 			token(&s, ap);
 		else
 		{
 			data()->ret += write(1, s, 1);
-			(*s)++;
+			s++;
 		}
 	}
 }

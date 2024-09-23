@@ -17,8 +17,6 @@ void	ft_int(va_list *ap)
 	long long	t;
 
 	t = va_arg(*ap, int);
-	if (data()->dot)
-	{	print_precision(count_number_length(t));printf("asdas");}
 	if (t < 0)
 	{
 		data()->ret += write(1, "-", 1);
@@ -26,7 +24,9 @@ void	ft_int(va_list *ap)
 	}
 	else
 		manage_tokens();
-	data()->ret += put_b_nbr(t, DEX, 10);
+	if (data()->dot)
+		print_precision(count_number_length(t));
+	put_b_nbr(t, DEX, 10);
 }
 
 void	ft_char(va_list *ap)
@@ -64,15 +64,15 @@ void	ft_pointer(va_list *ap)
 	s = va_arg(*ap, unsigned long);
 	if (!s)
 		data()->ret += write(1, "(nil)", 5);
-	data()->ret += write (1, "0x", 2) + put_b_nbr(s, HEXAL, 16);
+	data()->ret += write (1, "0x", 2);
+	put_b_nbr(s, HEXAL, 16);
 }
 
-int	put_b_nbr(unsigned long long nbr, char *b, size_t bs)
+void	put_b_nbr(unsigned long long nbr, char *b, size_t bs)
 {
-	int	i;
-
-	i = 0;
+	if (data()->dot)
+		print_precision(count_number_length(nbr));
 	if (nbr >= bs)
-		i = put_b_nbr((nbr / bs), b, bs);
-	return (i + write(1, &b[nbr % bs], 1));
+		put_b_nbr((nbr / bs), b, bs);
+	data()->ret += write(1, &b[nbr % bs], 1);
 }

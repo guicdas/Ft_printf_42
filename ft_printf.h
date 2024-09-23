@@ -24,17 +24,15 @@
 
 typedef struct s_data{
 	int	ret;
+	int	precision;
+	int	has_flags;
 
 	int	minus;
 	int	space;
-	int	character;
 	int	hash;
 	int	plus;
-	int	precision;
-	int	zero;
 	int	dot;
-
-	int	has_flags;
+	int	zero;
 }t_data;
 
 t_data *data(void);
@@ -45,9 +43,10 @@ void	token_loop(char *s, va_list *ap);
 void	manage_tokens(void);
 int		count_number_length(long long num);
 void	print_precision(int num);
+void	reset_flags(void);
 
 //-----	TYPES	-----//
-int		put_b_nbr(unsigned long long nbr, char *b, size_t bs);
+void		put_b_nbr(unsigned long long nbr, char *b, size_t bs);
 void	ft_pointer(va_list *ap);
 void	ft_char(va_list *ap);
 void	ft_str(va_list *ap, char m);

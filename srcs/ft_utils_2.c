@@ -19,35 +19,36 @@ void	f_uns(va_list *ap, char *s, char c)
 	t = va_arg(*ap, unsigned int);
 	if (t != 0)
 	{
-		if (c == 'x')
+		if (data()->hash && c == 'x')
 			data()->ret += write (1, "0x", 2);
-		if (c == 'X')
+		if (data()->hash && c == 'X')
 			data()->ret += write (1, "0X", 2);
 	}
-	data()->ret += put_b_nbr(t, s, 16);
+	put_b_nbr(t, s, 16);
 }
 
 int	count_number_length(long long num)
 {
 	int counter = 0;
+	//printf("num:%lld\n", num);
 	while (num)
 	{
 		num /= 10;
 		counter++;
-			printf("num: %lld\n", num);
 	}
-	printf("counter: %d\n", counter);
+	//printf("counter: %d\n", counter);
 	return (counter);
 }
 
 void	print_precision(int num)
 {
-	while (data()->precision - num > 0)
+	while (data()->precision - num > 1)
 	{
 		if (data()->space)
 			data()->ret += write(1, " ", 1);
 		else
 			data()->ret += write(1, "0", 1);
+		data()->precision--;
 	}
 }
 
@@ -57,4 +58,13 @@ void	manage_tokens(void)
 		data()->ret += write(1, "+", 1);
 	if (data()->space && !data()->plus)
 		data()->ret += write(1, " ", 1);
+}
+
+void	reset_flags(void)
+{
+	data()->dot = 0;
+	data()->space = 0;
+	data()->minus = 0;
+	data()->precision = 0;
+	data()->has_flags = 0;
 }

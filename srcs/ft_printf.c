@@ -33,9 +33,9 @@ int main(void)
 {
 	int	i;
 
-	i = ft_printf("|%.5d|", -10);
+	i = ft_printf("|%.15u %#.13x|", (unsigned)10, -4);
 	printf("\nreturn ->%d\n--------------------\n", i);
-	i = printf("|%.5d|", -10);
+	i = printf("|%.15u %#.13x|", (unsigned)10, -4);
 	printf("\nreturn ->%d\n", i);
 }
 

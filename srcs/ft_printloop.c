@@ -12,7 +12,16 @@
 
 #include "../ft_printf.h"
 
- void	get_precision(char **s)
+static void	reset_flags(void)
+{
+	data()->dot = 0;
+	data()->space = 0;
+	data()->minus = 0;
+	data()->precision = 0;
+	data()->has_flags = 0;
+}
+
+static void	get_precision(char **s)
 {
 	(*s)++;
 	while (**s && (**s >= '0' && **s <= '9'))
@@ -26,7 +35,7 @@
 	(*s)--;
 }
 
- int	set_token(char **s)
+static int	set_token(char **s)
 {
 	if (**s == '-') //Left-justify within the given field width;
 		data()->minus = 1;
@@ -46,7 +55,7 @@
 	return (1);
 }
 
- int	is_specifier(char **s, va_list *ap)
+static int	is_specifier(char **s, va_list *ap)
 {
 	if (**s == 'd' || **s == 'i')
 		ft_int(ap);
@@ -69,24 +78,21 @@
 	return (1);
 }
 
-static void	token(char **s, va_list *ap)
-{
-	(*s)++;
-	while (**s && set_token(s))
-		(*s)++;
-	if (is_specifier(s, ap))
-		(*s)++;
-	//printf("\nFLAGS ATIVADAS:\nprecision:%d\ndot:%d\nspace:%d\nult:%c.", data()->precision, data()->dot, data()->space, **s);
-	reset_flags();
-}
-
 void	token_loop(char *s, va_list *ap)
 {
 	while (*s)
 	{
 		//printf("\n->%c.", *s);
 		if (*s == '%')
-			token(&s, ap);
+		{
+			s++;
+			while (*s && set_token(&s))
+				s++;
+			if (is_specifier(&s, ap))
+				s++;
+			//printf("\nFLAGS ATIVADAS:\nprecision:%d\ndot:%d\nspace:%d\nult:%c.", data()->precision, data()->dot, data()->space, **s);
+			reset_flags();
+		}
 		else
 		{
 			data()->ret += write(1, s, 1);

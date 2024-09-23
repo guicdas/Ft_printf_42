@@ -43,7 +43,6 @@ void	token_loop(char *s, va_list *ap);
 void	manage_tokens(void);
 int		count_number_length(long long num);
 void	print_precision(int num);
-void	reset_flags(void);
 
 //-----	TYPES	-----//
 void		put_b_nbr(unsigned long long nbr, char *b, size_t bs);

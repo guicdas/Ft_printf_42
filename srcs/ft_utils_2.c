@@ -59,12 +59,3 @@ void	manage_tokens(void)
 	if (data()->space && !data()->plus)
 		data()->ret += write(1, " ", 1);
 }
-
-void	reset_flags(void)
-{
-	data()->dot = 0;
-	data()->space = 0;
-	data()->minus = 0;
-	data()->precision = 0;
-	data()->has_flags = 0;
-}

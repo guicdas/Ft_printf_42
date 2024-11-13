@@ -11,46 +11,47 @@
 # **************************************************************************** #
 
 CC				= gcc
-CFLAGS			= -Wall -Wextra -Werror -I./ # -fsanitize=address
+CFLAGS			= -Wall -Wextra -Werror -I.	 # -fsanitize=address
 RM				= rm -fr
 
-NAME			= libftprintf.a
+OBJS_DIR		= objs
+SRCS_DIR		= srcs
+NAME			= ft_printf
 HEADER			= ft_printf.h
-EXE				= ft_printf.exe
 
-SOURCES			= srcs/ft_printf.c srcs/ft_printloop.c srcs/ft_utils_2.c  \
-				 srcs/ft_types.c srcs/ft_utils.c
-BONUS			=  srcs/*.c
+SOURCES			= $(SRCS_DIR)/ft_printf.c $(SRCS_DIR)/ft_printloop.c $(SRCS_DIR)/ft_utils_2.c  \
+				 $(SRCS_DIR)/ft_types.c $(SRCS_DIR)/ft_utils.c
+BONUS			=  $(SRCS_DIR)/*.c
 
-SOURCES_O		= $(SOURCES:srcs/%.c=objs/%.o)
-BONUS_O		= $(BONUS:srcs/%.c=objs/%.o)
+SOURCES_O		= $(SOURCES:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
+BONUS_O		= $(BONUS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 
-all:		objs $(NAME)
+all:	$(NAME)
 
 $(NAME):		$(SOURCES_O)
-	ar -rcs $(NAME) $(SOURCES_O)
-	${CC} ${NAME} -o ${EXE}
+	clear
+	${CC} ${CFLAGS} $(SOURCES_O) -o ${NAME}
 
-objs:
+%.o: %.c
+	$(CC) $(CFLAGS) -o ${NAME} -c $< -o $@
+
+$(OBJS_DIR):
 	mkdir -p objs
 
-run:		${NAME}
-	clear && ${CC} ${NAME} -o ${EXE} && ./${EXE}
-
-objs/%.o: srcs/%.c
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR)
 	${CC} ${CFLAGS} -c $^ -o $@
 
 clean:
-	$(RM) $(SOURCES_O) $(BONUS_O)
+	$(RM) $(OBJS_DIR)
 
-bonus:			$(NAME) $(BONUS_O)
-	ar -rcs $(NAME) $(BONUS_O)
+#bonus:			$(NAME) $(BONUS_O)
+#	ar -rcs $(NAME) $(BONUS_O)
 
 fclean:			clean
 	$(RM) $(NAME)
 
 re:				fclean $(NAME)
 
-rebonus:		fclean bonus
+rebonus:		fclean #bonus
 
 .PHONY:			all clean fclean re
